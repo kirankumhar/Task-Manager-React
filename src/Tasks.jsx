@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
+import './Task.css';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
@@ -25,25 +27,59 @@ const Tasks = () => {
             .catch(error => console.error("Error marking task as completed:", error));
     };
 
-    return(
+    const deleteTask = (id) =>{
+        axios.post(`http://127.0.0.1:8000/api/tasks-all/delete/${id}`)
+        .than(()=> {
+            alert("Task deleted");
+            fetchTasks();
+        })
+        .catch(error => console.error("Error deleting task", error));
+    };
+
+    return (
+      <Container className="mt-5">
         <div>
-            <h1>Task List</h1>
-            <ul>
-                {tasks.map(task => (
-                    <li key={task.id}> 
-                    {task.id}
-                    {task.title}
-                    {task.completed ? (
-                        <span style={{ color: 'green', marginLeft: '10px' }}>Completed</span>
-                    ) : (
-                        <button onClick={() => markAsCompleted(task.id)} style={{ marginLeft: '10px' }}>
-                                Mark as Completed
-                            </button>
-                    )}
-                    </li>
-                ))}
-            </ul>
+          <h1 className="text-center">Task List</h1>
+          <Row className="mt-4">
+            {tasks.map((task) => (
+              <Col md={4} key={task.id} className="mb-3">
+                <Card>
+                  <Card.Body>
+                    <Card.Title>{task.title}</Card.Title>
+                    <Card.Text>
+                      {task.completed ? (
+                        <span className="text-success">Completed</span>
+                      ) : (
+                        <span className="text-warning">pending</span>
+                      )}
+                    </Card.Text>
+                    <Button
+                      variant={task.complete ? "secondary" : "success"}
+                      onClick={() => markAsCompleted(task.id)}
+                      disabled={task.completed}
+                    >
+                      Done
+                    </Button>
+
+                    <Button
+                      variant={task.complete ? "secondary" : "danger"}
+                      onClick={() => deleteTask(task.id)}
+                      style={{
+                        marginLeft: "10px",
+                        backgroundColor: "#dc3545", // Bootstrap danger red
+                        borderColor: "#dc3545",
+
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
         </div>
+      </Container>
     );
         
 } ;

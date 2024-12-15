@@ -1,0 +1,14 @@
+.task-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body{
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #153677, #4e085f );
+    padding: 10px;
+}
+h1{
+    color: #fff;
+    text-transform: uppercase;
+}
